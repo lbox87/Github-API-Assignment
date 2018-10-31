@@ -1,7 +1,5 @@
 'use strict';
 
-// "https://api.github.com/users/lbox87/repos"
-
 function submitForm() {
     $('form').submit(event => {
         event.preventDefault();
@@ -17,23 +15,27 @@ function submitForm() {
             })
             .then(responseJson => displayResults(responseJson))
             .catch(err => {
-                console.log(`${err.message}`);
-                $('#js-error-message').text(`Something went wrong: ${err.message}`);
+                if (err.message == "") {
+                    $('#js-error-message').text(`Something went wrong: user not found`);
+                }
+                else {
+                    $('#js-error-message').text(`Something went wrong: ${err.message}`);
+                }
             });
     })
 }
 
 function displayResults(responseJson) {
-  console.log(responseJson);
-  $('#results-list').empty();
-  for (let i = 0; i < responseJson.length; i++){
-    $('#results-list').append(
-      `<li><h3><a href="${responseJson[i].url}">${responseJson[i].name}</a></h3>
-      </li>`
-    )};
-  $('#results').removeClass('hidden');
+    console.log(responseJson);
+    $('#results-list').empty();
+    for (let i = 0; i < responseJson.length; i++) {
+        $('#results-list').append(
+            `<li><h3>${responseJson[i].name}</h3></li>
+      <p><a href="${responseJson[i].url}">${responseJson[i].url}</a>
+      </p>`
+        )
+    };
+    $('#results').removeClass('hidden');
 };
 
 $(submitForm);
-
-
